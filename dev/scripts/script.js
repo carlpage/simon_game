@@ -1,4 +1,4 @@
-$(document).ready(() => {
+$(document).ready( () => {
 
     let sequence = [];
     let userClicks = [];
@@ -21,6 +21,7 @@ $(document).ready(() => {
         $("#counter").html("<p>0</p>");
         sequence = [];
         userClicks = [];
+        location.reload();
     });
 
     $("#start").on("click", () => {
@@ -35,7 +36,7 @@ $(document).ready(() => {
     }
 
     function start() {
-        
+
         function addToSequence() {
             sequence.push(colors[randomNum()]);
         }
@@ -43,26 +44,19 @@ $(document).ready(() => {
         function displaySequence() {
             $("#counter").html("<p>" + sequence.length + "</p>");
             let j = 0;
-
-            console.log(sequence);
+            console.log(sequence, userClicks);
             blinkSequence(sequence[0]);
-
             function blinkSequence(color) {
-                setTimeout(() => {
-
+                setTimeout( () => {
                     console.log(color);
                     playSound(color);
-
                     $("#" + color).fadeTo("fast", 0.5).fadeTo("fast", 1);
-
                     if (j < sequence.length) {
                         j++;
-                        console.log(j);
-                        console.log(sequence[j]);
+                        // console.log(sequence[j]);
                         blinkSequence(sequence[j]);
                     }
-                }, 1000);
-
+                }, 800); // end setTimeout
             } // end blinkSequence
         } // end displaySequence
 
@@ -95,19 +89,19 @@ $(document).ready(() => {
         addToSequence();
         displaySequence();
 
-        // cannot use an es6 arrow function, because I need to use this.
+        // cannot use an es6 arrow function, because I need to use this
         $(".button").on("click", function () {
             playSound(this.id);
             $(this).fadeTo("fast", 0.5).fadeTo("fast", 1);
             userClicks.push(this.id);
             let i = 0;
-            console.log(userClicks, sequence);
+            console.log("sequence: ", sequence, "user clicks: ", userClicks);
             for (let i in userClicks) {
                 if (sequence[i] !== userClicks[i]) {
                     console.log("Nope!");
                     errorSound.play();
                     userClicks = [];
-                    setTimeout(() => {
+                    setTimeout( () => {
                         displaySequence();
                     }, 2000);
                 } // end conditional
@@ -117,7 +111,7 @@ $(document).ready(() => {
                 checkIfCorrect(sequence, userClicks);
                 userClicks = [];
                 addToSequence();
-                setTimeout(() => {
+                setTimeout( () => {
                     displaySequence();
                 }, 2000);
             } // end conditional
