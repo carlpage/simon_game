@@ -15,6 +15,7 @@ $(document).ready(function () {
     const blue = "blue";
     const yellow = "yellow";
     const colors = [red, green, yellow, blue];
+    let color;
 
     $("#reset").on("click", function () {
         $("#counter").html("<p>0</p>");
@@ -36,17 +37,30 @@ $(document).ready(function () {
 
         function displaySequence() {
             $("#counter").html("<p>" + sequence.length + "</p>");
-            let i = 1;
+            let j = 1;
+            // let done = 1;
+            console.log(sequence);
             blinkSequence(sequence[0]);
 
             function blinkSequence(color) {
+                console.log(color);
                 playSound(color);
+                // let effect = $(color).fadeTo("fast", 0.5).fadeTo("fast", 1);
+
+                // $.when(effect).done(function () {
+                //     if (done < sequence.length) {
+                //         done++;
+                //         blinkSequence(sequence[done - 1]);
+                //     }
+                // });
                 blink(color);
-                if (i < sequence.length) {
+                // $.when(blink(color)).done(function() {
+                if (j < sequence.length) {
                     console.log("im here");
-                    i++;
-                    blinkSequence(sequence[i - 1]);
+                    j++;
+                    blinkSequence(sequence[j - 1]);
                 }
+                // }); // end when
             } // end blinkSequence
         } // end displaySequence
 
@@ -67,6 +81,7 @@ $(document).ready(function () {
 
         function checkIfCorrect(sequence, userClicks) {
             for (let i = sequence.length; i--;) {
+                console.log("here", i);
                 if (sequence[i] !== userClicks[i]) {
                     $("#counter").html("<p>00</p>");
                     return false;
@@ -82,18 +97,20 @@ $(document).ready(function () {
             playSound(this.id);
             blink(this);
             userClicks.push(this.id);
+            let i = 0;
             console.log(userClicks, sequence);
             for (let i in userClicks) {
                 if (sequence[i] !== userClicks[i]) {
                     console.log("Nope!");
                     errorSound.play();
-                    userClick = [];
+                    userClicks = [];
                     setTimeout(function () {
                         displaySequence();
-                    }, 1000);
+                    }, 2000);
                 } // end conditional
+                i++;
             } // end loop
-            if (sequence[i].length === userClicks[i].length) {
+            if (sequence.length === userClicks.length) {
                 checkIfCorrect(sequence, userClicks);
                 userClicks = [];
                 addToSequence();
@@ -103,7 +120,7 @@ $(document).ready(function () {
             } // end conditional
         }); // end button on click
 
-    }
+    } // end start function
 
     function blink(color) {
         $(color).fadeTo("fast", 0.5).fadeTo("fast", 1);
@@ -112,7 +129,5 @@ $(document).ready(function () {
     function randomNum() {
         return Math.floor(Math.random() * 4);
     }
-
-
 
 });
