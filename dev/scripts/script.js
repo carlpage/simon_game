@@ -96,6 +96,9 @@ $(document).ready( () => {
             userClicks.push(this.id);
             let i = 0;
             console.log("sequence: ", sequence, "user clicks: ", userClicks);
+            if (userClicks.length === 20 && sequence.length === 20) {
+                $(".modal-message").show();
+            }
             for (let i in userClicks) {
                 if (sequence[i] !== userClicks[i]) {
                     console.log("Nope!");
@@ -118,5 +121,10 @@ $(document).ready( () => {
         }); // end button on click
 
     } // end start function
+
+    $(".close").on("click", () => {
+        $(".modal-message").hide();
+        location.reload();
+    });
 
 });
