@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(() => {
 
     let sequence = [];
     let userClicks = [];
@@ -17,50 +17,52 @@ $(document).ready(function () {
     const colors = [red, green, yellow, blue];
     let color;
 
-    $("#reset").on("click", function () {
+    $("#reset").on("click", () => {
         $("#counter").html("<p>0</p>");
         sequence = [];
         userClicks = [];
     });
 
-    $("#start").on("click", function () {
+    $("#start").on("click", () => {
         $("#counter").html("<p>0</p>");
         sequence = [];
         userClicks = [];
         start();
     });
 
+    function randomNum() {
+        return Math.floor(Math.random() * 4);
+    }
+
     function start() {
+        
         function addToSequence() {
             sequence.push(colors[randomNum()]);
         }
 
         function displaySequence() {
             $("#counter").html("<p>" + sequence.length + "</p>");
-            let j = 1;
-            // let done = 1;
+            let j = 0;
+
             console.log(sequence);
             blinkSequence(sequence[0]);
 
             function blinkSequence(color) {
-                console.log(color);
-                playSound(color);
-                // let effect = $(color).fadeTo("fast", 0.5).fadeTo("fast", 1);
+                setTimeout(() => {
 
-                // $.when(effect).done(function () {
-                //     if (done < sequence.length) {
-                //         done++;
-                //         blinkSequence(sequence[done - 1]);
-                //     }
-                // });
-                blink(color);
-                // $.when(blink(color)).done(function() {
-                if (j < sequence.length) {
-                    console.log("im here");
-                    j++;
-                    blinkSequence(sequence[j - 1]);
-                }
-                // }); // end when
+                    console.log(color);
+                    playSound(color);
+
+                    $("#" + color).fadeTo("fast", 0.5).fadeTo("fast", 1);
+
+                    if (j < sequence.length) {
+                        j++;
+                        console.log(j);
+                        console.log(sequence[j]);
+                        blinkSequence(sequence[j]);
+                    }
+                }, 1000);
+
             } // end blinkSequence
         } // end displaySequence
 
@@ -93,9 +95,10 @@ $(document).ready(function () {
         addToSequence();
         displaySequence();
 
+        // cannot use an es6 arrow function, because I need to use this.
         $(".button").on("click", function () {
             playSound(this.id);
-            blink(this);
+            $(this).fadeTo("fast", 0.5).fadeTo("fast", 1);
             userClicks.push(this.id);
             let i = 0;
             console.log(userClicks, sequence);
@@ -104,7 +107,7 @@ $(document).ready(function () {
                     console.log("Nope!");
                     errorSound.play();
                     userClicks = [];
-                    setTimeout(function () {
+                    setTimeout(() => {
                         displaySequence();
                     }, 2000);
                 } // end conditional
@@ -114,20 +117,12 @@ $(document).ready(function () {
                 checkIfCorrect(sequence, userClicks);
                 userClicks = [];
                 addToSequence();
-                setTimeout(function () {
+                setTimeout(() => {
                     displaySequence();
                 }, 2000);
             } // end conditional
         }); // end button on click
 
     } // end start function
-
-    function blink(color) {
-        $(color).fadeTo("fast", 0.5).fadeTo("fast", 1);
-    }
-
-    function randomNum() {
-        return Math.floor(Math.random() * 4);
-    }
 
 });
